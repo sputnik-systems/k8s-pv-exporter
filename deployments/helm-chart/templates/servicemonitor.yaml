@@ -1,0 +1,20 @@
+{{- if .Values.metrics.serviceMonitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ include "k8s-pv-exporter.fullname" . }}
+  labels:
+    {{- include "k8s-pv-exporter.labels" . | nindent 4 }}
+spec:
+  endpoints:
+  - port: http
+    interval: {{ .Values.metrics.serviceMonitor.interval }}
+    scrapeTimeout: {{ .Values.metrics.serviceMonitor.scrapeTimeout }}
+    {{- with .Values.metrics.serviceMonitor.metricRelabelings }}
+    metricRelabelings:
+    {{- toYaml . | nindent 6 }}
+    {{- end }}
+  selector:
+    matchLabels:
+      {{- include "k8s-pv-exporter.selectorLabels" . | nindent 6 }}
+{{- end }}
