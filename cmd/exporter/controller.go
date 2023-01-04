@@ -64,6 +64,14 @@ func (r *reconcilePersistentVolume) Reconcile(ctx context.Context, request recon
 	// Print the PersistentVolume
 	log.Info("adding metric")
 
+	if ref := pv.Spec.ClaimRef; ref != nil {
+		labels["persistentvolumeclaim"] = ref.Name
+		labels["namespace"] = ref.Namespace
+	} else {
+		labels["persistentvolumeclaim"] = ""
+		labels["namespace"] = ""
+	}
+
 	if csi := pv.Spec.CSI; csi != nil {
 		labels["csi_driver"] = csi.Driver
 		labels["csi_volume_handle"] = csi.VolumeHandle

@@ -42,7 +42,7 @@ func init() {
 	metric = prometheus.NewGaugeVec(prometheus.GaugeOpts{
 		Name: "kube_persistentvolume_info",
 		Help: "The custom pv metrics exporter",
-	}, []string{"name", "csi_driver", "csi_volume_handle", "csi_fs_type"})
+	}, []string{"name", "persistentvolumeclaim", "namespace", "csi_driver", "csi_volume_handle", "csi_fs_type"})
 
 	metrics.Registry.MustRegister(metric)
 }
